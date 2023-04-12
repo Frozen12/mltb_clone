@@ -4,6 +4,7 @@ from subprocess import run as srun
 from requests import get as rget
 from dotenv import load_dotenv, dotenv_values
 from pymongo import MongoClient
+import requests
 
 if ospath.exists('log.txt'):
     with open('log.txt', 'r+') as f:
@@ -12,6 +13,17 @@ if ospath.exists('log.txt'):
 basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             handlers=[FileHandler('log.txt'), StreamHandler()],
             level=INFO)
+
+# Fetch config.env from url (htttps://gist.github.com/username/*)
+# Make sure to set `CONFIG_URL` environment 
+
+response = requests.get(CONFIG_URL)
+
+if response.status_code == 200:
+    with open("config.env", "w") as f:
+        f.write(response.text)
+else:
+    print("Error: Unable to retrieve configuration data.")
 
 load_dotenv('config.env', override=True)
 
