@@ -15,16 +15,23 @@ basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             level=INFO)
 
 # Fetch config.env from url (htttps://gist.github.com/username/*)
-# Make sure to set `CONFIG_URL` environment 
+# Make sure to set `CONFIG_FILE_URL` environment 
 
-config_url = os.getenv('CONFIG_URL')
-response = requests.get(config_url)
-
-if response.status_code == 200:
-    with open("config.env", "w") as f:
-        f.write(response.text)
-else:
-    print("Error: Unable to retrieve configuration data.")
+CONFIG_FILE_URL = environ.get('CONFIG_FILE_URL')
+try:
+    if len(CONFIG_FILE_URL) == 0:
+        raise TypeError
+    try:
+        res = rget(CONFIG_FILE_URL)
+        if res.status_code == 200:
+            with open('config.env', 'wb+') as f:
+                f.write(res.content)
+        else:
+            log_error(f"Failed to download config.env {res.status_code}")
+    except Exception as e:
+        log_error(f"CONFIG_FILE_URL: {e}")
+except:
+    pass
 
 load_dotenv('config.env', override=True)
 
