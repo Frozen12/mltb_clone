@@ -4,7 +4,6 @@ from subprocess import run as srun
 from requests import get as rget
 from dotenv import load_dotenv, dotenv_values
 from pymongo import MongoClient
-import requests
 
 if ospath.exists('log.txt'):
     with open('log.txt', 'r+') as f:
