@@ -17,7 +17,8 @@ basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
 # Fetch config.env from url (htttps://gist.github.com/username/*)
 # Make sure to set `CONFIG_URL` environment 
 
-response = requests.get(CONFIG_URL)
+config_url = os.getenv('CONFIG_URL')
+response = requests.get(config_url)
 
 if response.status_code == 200:
     with open("config.env", "w") as f:
